@@ -1,3 +1,7 @@
 fastapi
 uvicorn
 httpx<0.25
+sqlmodel
+passlib[bcrypt]
+python-jose[cryptography]
+python-multipart

@@ -8,6 +8,7 @@ This repository contains a minimal prototype of the application described in `AG
 - Two example models (echo and reverse)
 - Length-based scoring metric
 - REST API built with FastAPI
+- User registration and JWT-based login
 - Docker support for easy deployment
 
 ## Running locally
@@ -33,3 +34,26 @@ docker run -p 8000:8000 ai-benchmark-tool
 ```
 
 Open `http://localhost:8000` to use the app.
+
+### Authentication
+
+Register a new user:
+
+```bash
+curl -X POST http://localhost:8000/register \
+  -H 'Content-Type: application/json' \
+  -d '{"username":"user","password":"pass"}'
+```
+
+Use the returned token to authenticate when calling protected endpoints:
+
+```bash
+curl -X POST http://localhost:8000/login \
+  -d 'username=user&password=pass'
+
+# Example using the token for evaluation
+curl -X POST http://localhost:8000/api/evaluate \
+  -H "Authorization: Bearer <TOKEN>" \
+  -H 'Content-Type: application/json' \
+  -d '{"prompt":"hello"}'
+```
