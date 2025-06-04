@@ -11,9 +11,11 @@ def client():
     with TestClient(app) as c:
         yield c
 
+
 def test_root(client):
     r = client.get('/')
     assert r.status_code == 200
+
 
 def test_evaluate(client):
     r = client.post('/api/evaluate', json={'prompt': 'hello'})
@@ -21,6 +23,7 @@ def test_evaluate(client):
     data = r.json()
     assert 'results' in data
     assert len(data['results']) == 2
+
 
 def test_register_login_and_eval(client):
     reg = client.post('/register', json={'username': 'alice', 'password': 'pw'})

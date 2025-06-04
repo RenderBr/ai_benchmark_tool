@@ -65,10 +65,12 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> Optional[User]:
             raise HTTPException(status_code=401, detail="User not found")
         return user
 
+
 def require_admin(user: User = Depends(get_current_user)) -> User:
     if not user.is_admin:
         raise HTTPException(status_code=403, detail="Admin access required")
     return user
+
 
 def get_models() -> List[EchoModel]:
     with get_session() as session:
@@ -79,6 +81,7 @@ def get_models() -> List[EchoModel]:
         if cls:
             models.append(cls())
     return models
+
 
 def evaluate_prompt(prompt: str) -> List[Dict[str, str]]:
     results = []
@@ -149,6 +152,7 @@ def delete_model(model_id: int, user: User = Depends(require_admin)):
         session.commit()
         return {"detail": "deleted"}
 
+
 @app.post("/api/evaluate", response_model=PromptResponse)
 async def evaluate(req: PromptRequest, token: Optional[str] = Depends(oauth2_scheme)):
     user: Optional[User] = None
@@ -171,6 +175,7 @@ async def evaluate(req: PromptRequest, token: Optional[str] = Depends(oauth2_sch
                 session.add(ev)
             session.commit()
     return {"results": results}
+
 
 @app.get("/")
 async def root():
